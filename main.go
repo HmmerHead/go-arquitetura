@@ -17,6 +17,8 @@ package main
 
 import "github.com/HmmerHead/go-arquit/cmd"
 
+// Via linha de comando -> go run main.go cli
+// habilitar servidor -> go run main.go http 
 func main() {
 	cmd.Execute()
 }

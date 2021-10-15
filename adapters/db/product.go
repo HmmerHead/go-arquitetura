@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"errors"
 
 	app "github.com/HmmerHead/go-arquit/application"
 	_ "github.com/mattn/go-sqlite3"
@@ -21,13 +20,14 @@ func (p *ProductDb) Get(id string) (app.ProductInterface, error) {
 
 	stmt, err := p.db.Prepare("select id, name, price, status from products where id=?")
 	if err != nil {
-		return nil, errors.New("cannot divide through zero")
+		return nil, err
 	}
 
 	err = stmt.QueryRow(id).Scan(&product.ID, &product.Name, &product.Price, &product.Status)
 
 	if err != nil {
-		return nil, errors.New("cannot divide through zero")
+		// errors.New("Alguma mensagem") ??
+		return nil, err
 	}
 
 	return &product, nil
