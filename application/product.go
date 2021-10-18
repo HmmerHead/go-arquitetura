@@ -23,20 +23,20 @@ type Product struct {
 	Price  float64 `valid:"float,optional"`
 }
 
-func (prod *Product) GetId() string {
-	return prod.ID
+func (product *Product) GetId() string {
+	return product.ID
 }
 
-func (prod *Product) GetName() string {
-	return prod.Name
+func (product *Product) GetName() string {
+	return product.Name
 }
 
-func (prod *Product) GetStatus() string {
-	return prod.Status
+func (product *Product) GetStatus() string {
+	return product.Status
 }
 
-func (prod *Product) GetPrice() float64 {
-	return prod.Price
+func (product *Product) GetPrice() float64 {
+	return product.Price
 }
 
 type ProductInterface interface {
@@ -66,20 +66,20 @@ type ProductServiceInterface interface {
 }
 
 
-func (prod *Product) IsValid() (bool, error) {
-	if prod.Status == "" {
-		prod.Status = DISABLED
+func (product *Product) IsValid() (bool, error) {
+	if product.Status == "" {
+		product.Status = DISABLED
 	}
 
-	if prod.Status != ENABLED && prod.Status != DISABLED {
+	if product.Status != ENABLED && product.Status != DISABLED {
 		return false, errors.New("precisa de um status")
 	}
 
-	if prod.Price < 0 {
+	if product.Price < 0 {
 		return false, errors.New("precisa de um preco")
 	}
 
-	_, err := govalidator.ValidateStruct(prod)
+	_, err := govalidator.ValidateStruct(product)
 	if err != nil {
 		return false, err
 	}
@@ -87,9 +87,9 @@ func (prod *Product) IsValid() (bool, error) {
 	return true, nil
 }
 
-func (prod *Product) Enable() error {
-	if prod.Price > 0 {
-		prod.Status = ENABLED
+func (product *Product) Enable() error {
+	if product.Price > 0 {
+		product.Status = ENABLED
 		return nil
 	}
 
