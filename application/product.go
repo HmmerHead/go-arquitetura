@@ -11,36 +11,6 @@ func init() {
 	govalidator.SetFieldsRequiredByDefault(true)
 }
 
-type ProductInterface interface {
-	IsValid() (bool, error)
-	Enable() error
-	Disable() error
-	GetId() string
-	GetName() string
-	GetStatus() string
-	GetPrice() float64
-}
-
-type ProductServiceInterface interface {
-	Get(id string) (ProductInterface, error)
-	Create(name string, price float64) (ProductInterface, error)
-	Enable(product ProductInterface) (ProductInterface, error)
-	Disable(product ProductInterface) (ProductInterface, error)
-}
-
-type ProductReader interface {
-	Get(id string) (ProductInterface, error)
-}
-
-type ProductWriter interface {
-	Save(product ProductInterface) (ProductInterface, error)
-}
-
-type ProductPersistenceInterface interface {
-	ProductReader
-	ProductWriter
-}
-
 const (
 	DISABLED = "disabled"
 	ENABLED  = "enabled"
@@ -53,6 +23,33 @@ type Product struct {
 	Price  float64 `valid:"float,optional"`
 }
 
+func (prod *Product) GetId() string {
+	return prod.ID
+}
+
+func (prod *Product) GetName() string {
+	return prod.Name
+}
+
+func (prod *Product) GetStatus() string {
+	return prod.Status
+}
+
+func (prod *Product) GetPrice() float64 {
+	return prod.Price
+}
+
+type ProductInterface interface {
+	IsValid() (bool, error)
+	Enable() error
+	Disable() error
+	GetId() string
+	GetName() string
+	GetStatus() string
+	GetPrice() float64
+}
+
+
 func NewProduct() *Product {
 	product := Product{
 		ID:     uuid.NewV4().String(),
@@ -60,6 +57,14 @@ func NewProduct() *Product {
 	}
 	return &product
 }
+
+type ProductServiceInterface interface {
+	Get(id string) (ProductInterface, error)
+	Create(name string, price float64) (ProductInterface, error)
+	Enable(product ProductInterface) (ProductInterface, error)
+	Disable(product ProductInterface) (ProductInterface, error)
+}
+
 
 func (prod *Product) IsValid() (bool, error) {
 	if prod.Status == "" {
@@ -99,18 +104,15 @@ func (prod *Product) Disable() error {
 	return errors.New("o preco tem que ser igual a zero para desativar o prod")
 }
 
-func (prod *Product) GetId() string {
-	return prod.ID
+type ProductReader interface {
+	Get(id string) (ProductInterface, error)
 }
 
-func (prod *Product) GetName() string {
-	return prod.Name
+type ProductWriter interface {
+	Save(product ProductInterface) (ProductInterface, error)
 }
 
-func (prod *Product) GetStatus() string {
-	return prod.Status
-}
-
-func (prod *Product) GetPrice() float64 {
-	return prod.Price
+type ProductPersistenceInterface interface {
+	ProductReader
+	ProductWriter
 }
